@@ -15,3 +15,7 @@ print(c)
 
 """for row in range (1, wd.get_highest_row() + 1):
     a = sheet['A' + str(row)].value"""
+
+
+//QuickSort
+void QuickSort
