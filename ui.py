@@ -1,5 +1,8 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
+from PyQt6.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
+from PyQt6.QtGui import QIcon
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -8,9 +11,11 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(50, 40, 151, 41))
+        self.pushButton.setGeometry(QtCore.QRect(50, 40, 151, 41)) # zaladuj plik
         self.pushButton.setObjectName("pushButton")
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+
+
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget) # podaj wynik
         self.pushButton_2.setGeometry(QtCore.QRect(50, 110, 151, 41))
         self.pushButton_2.setObjectName("pushButton_2")
         MainWindow.setCentralWidget(self.centralwidget)
@@ -25,11 +30,23 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Ekonometria"))
         self.pushButton.setText(_translate("MainWindow", "Zaladuj plik"))
         self.pushButton_2.setText(_translate("MainWindow", "Podaj wyniki"))
+        self.pushButton.clicked.connect(self.open_dialog_box)
+        self.pushButton_2.clicked.connect(self.start_count)
+
+    def open_dialog_box(self):
+        filename = QFileDialog.getOpenFileName()
+        path_exel = filename[0]
+        print(path_exel)  # exel file path
+
+    def start_count(self):
+        print("start count")
+
 
 
 if __name__ == "__main__":
