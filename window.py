@@ -17,5 +17,3 @@ print(c)
     a = sheet['A' + str(row)].value"""
 
 
-//QuickSort
-void QuickSort

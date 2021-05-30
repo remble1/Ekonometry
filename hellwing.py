@@ -3,6 +3,8 @@ from itertools import combinations
 import numpy as np
 import scipy as sp
 
+Y = [870, 870, 860, 830, 820, 790, 770, 550, 360, 340, 640]
+X = [820, 820, 810, 800, 790, 780, 780, 990, 1160, 1180, 870]
 # wczytac z pliku liste X z pliku CSV
 class Hellwig:
     def __init__(self, X, Y):
@@ -14,10 +16,10 @@ class Hellwig:
         self.R = self.CreateR()
         self.h = self.Createh()
         self.H = self.CreateH()
-        self.Answer = np.array(self.Combinations[np.argmax(self.H)])
+        self.Answer = np.array(self.Combinations[np.argmax(self.H)]) # tablica z numpy
 
     def __str__(self):
-        return str(self.Answer)
+        return str(self.Answer) # objekt zwraca str
 
 
     def n(self, arr, n):
@@ -27,7 +29,7 @@ class Hellwig:
             pass
         return list(combinations(arr, n))
 
-    def All(self, arr):
+    def All(self, arr): # bierze tablice
         output = []
         N = range(len(arr))
         for n in N:
@@ -70,3 +72,5 @@ class Hellwig:
         for combination in self.h:
             tmp.append(np.sum(combination))
         return np.array(tmp)
+
+hellwig = Hellwig()
