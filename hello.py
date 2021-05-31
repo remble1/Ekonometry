@@ -3,8 +3,6 @@ from itertools import combinations
 import numpy as np
 import scipy as sp
 
-Y = [870, 870, 860, 830, 820, 790, 770, 550, 360, 340, 640]
-X = [820, 820, 810, 800, 790, 780, 780, 990, 1160, 1180, 870]
 # wczytac z pliku liste X z pliku CSV
 class Hellwig:
     def __init__(self, X, Y):
@@ -73,4 +71,4 @@ class Hellwig:
             tmp.append(np.sum(combination))
         return np.array(tmp)
 
-hellwig = Hellwig()
+

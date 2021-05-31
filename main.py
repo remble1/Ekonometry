@@ -1,5 +1,5 @@
 from sklearn import datasets
-import hellwing as H
+import hello as H
 import pandas as pd
 import numpy as np
 
