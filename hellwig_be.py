@@ -62,7 +62,7 @@ corr_matrix = corr_matrix.round(decimals=6, out=None)
 for i in range(1, m + 1):  # przekazanie współczynników korelacji między xi a y rj - potrzebne do obliczania h
     var_cor.append(corr_matrix[0][i-1])
 
-corr_matrix = np.delete(corr_matrix, 0, axis=0)  # usuniecie pierwszego wiersza i kolumny z korelacją x i y, ponieważ potem jest
+corr_matrix = np.delete(corr_matrix, 0, axis=0)  # usuniecie pierwszego wiersza i  kolumny z korelacją x i y, ponieważ potem jest
 corr_matrix = np.delete(corr_matrix, 0, axis=1)  # obliczanie sumy rij
 print(f"{corr_frame} \n")
 print(f"{corr_matrix} \n")
