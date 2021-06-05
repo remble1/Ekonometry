@@ -54,12 +54,15 @@ class Ui_MainWindow(object):
     def start_count(self):
         print("start count")
 
+    def kmnk(self):
+
+
     def hellwig(self):
 
         # Deklaracja używanych danych
 
 
-        self.file_name = 'D:/Workspace/Ekonometry/Ekonometry/dane.xlsx'  # nazwa dokumentu Excel o rozszerzeniu xslx
+        #self.file_name = 'D:/Workspace/Ekonometry/Ekonometry/dane.xlsx'  # nazwa dokumentu Excel o rozszerzeniu xslx
         print(self.file_name)
         file_name = self.file_name
         sheet = 'date'  # nazwa arkusza z tabelą
@@ -163,6 +166,8 @@ class Ui_MainWindow(object):
         print(f"\nOptymalnym zbiorem zmiennych objaśniających jest kombinacja C{idx}")
         for i in range(len(var_win)):
             print(var_win[i])
+
+
 
 
 if __name__ == "__main__":
