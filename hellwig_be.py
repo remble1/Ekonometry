@@ -6,7 +6,7 @@ from itertools import product
 from pandas.core.arrays.sparse import dtype
 
 # Deklaracja używanych danych
-file_name = 'dane.xlsx'  # nazwa dokumentu Excel o rozszerzeniu xslx
+file_name = 'D:/Workspace/Ekonometry/Ekonometry/dane.xlsx'  # nazwa dokumentu Excel o rozszerzeniu xslx
 sheet = 'date'  # nazwa arkusza z tabelą
 
 data1 = pd.read_excel(file_name, sheet_name=sheet, header=None,
@@ -89,7 +89,7 @@ for i in range(0, S):  # kolejne H są dodawane do listy, potem na podstawie poz
     s = np.sum(final_matrix[i])  # najlepszej kombinacji zmiennych objaśniających
     s = round(s, 6) # zaokrągla wartosc S do 6 liczb po przecinku
     H.append(s)
-    print(f"C{i} -- {H}") # pusta lista WTF
+    print(f"C{i} -- {sum(H)}") # pusta lista WTF
 
 max_H = max(H)  # najwyzsze H
 idx = 0  # poszukiwany index
