@@ -44,6 +44,7 @@ class Ui_MainWindow(object):
         self.pushButton_2.setText(_translate("MainWindow", "Podaj wyniki"))
         self.pushButton.clicked.connect(self.open_dialog_box)
         self.pushButton_2.clicked.connect(self.hellwig)
+        #self.pushButton_2.clicked.connect(self.kmnk)
         self.file_name = ""
 
     def open_dialog_box(self):
@@ -55,7 +56,17 @@ class Ui_MainWindow(object):
         print("start count")
 
     def kmnk(self):
+        file_name = self.file_name
+        sheet = 'date'  # nazwa arkusza z tabelą
 
+        data1 = pd.read_excel(file_name, sheet_name=sheet, header=None,
+                              engine='openpyxl')  # pobrane dane z arkusza przy czym 1 wiersz to nazwy,
+        # ponieważ z funkcją read_excel są trudne do pozyskania
+        data2 = pd.read_excel(file_name, sheet_name=sheet, engine='openpyxl')  # faktyczne dane
+
+        y = data1.iloc[0][0]  # nazwa zmiennej objasnianej jej pozycja w tabeli
+
+        var_number = len(data1.loc[0])  # liczba wszystkich zmiennych Y X1 X2 X3 X4
 
     def hellwig(self):
 
@@ -86,7 +97,8 @@ class Ui_MainWindow(object):
         for c in range(1, var_number):  # dla każdej kolumny poza kolumną 1 ze zmienna objaśnianą
             xi = data1.loc[:, i]  # wszystkie wartosci liczbowe z kolumny
             xi = xi.loc[
-                 1:, ]  # nie branie pod uwagę 1 wiersza z wartościami nieliczbowymi (nazwy kolumn) nazwa kolumny liczbowej
+                 1:,
+                 ]  # nie branie pod uwagę 1 wiersza z wartościami nieliczbowymi (nazwy kolumn) nazwa kolumny liczbowej
             mean = statistics.mean(xi)  # średnia zmiennej
             print(f"Srednia zmiennej X{c} wynosi {mean}")
             sd = statistics.stdev(xi)  # odchylenie standardowe zmiennej
