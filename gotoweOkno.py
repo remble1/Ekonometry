@@ -19,7 +19,7 @@ class Ui_MainWindow(object):
         self.pushButton.setGeometry(QtCore.QRect(110, 30, 151, 41))
         self.pushButton.setObjectName("pushButton")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(40, 110, 301, 311))
+        self.label.setGeometry(QtCore.QRect(40, 110, 301, 450))
         self.label.setObjectName("label")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(450, 30, 151, 41))
@@ -55,6 +55,15 @@ class Ui_MainWindow(object):
         "\n"
         "3. Przyciśnij przycisk \"Podaj wyniki\" aby zobaczyć\n"
         " przebieg i wyniki. \n"
+        "\n"
+        "\n"
+        "\n"
+        "\n"
+        "\n"
+        "\n"
+        "\n"
+        "\n"
+        "\n"
         "\n"
         "\n"
         "\n"
@@ -121,23 +130,23 @@ class Ui_MainWindow(object):
             mean = statistics.mean(xi)  # średnia zmiennej
 
             if c == 1:
-                a1 = f"Średnia zmiennej Y wynosi {mean}\n"
+                a1 = f"Średnia zmiennej Y wynosi {np.round(mean, 4)}\n"
                 self.tekst.append(a1)
                 sd = statistics.stdev(xi)  # odchylenie standardowe zmiennej
-                a2 = f"Odchylenie standardowe Y wynosi {sd}\n"
+                a2 = f"Odchylenie standardowe Y wynosi {np.round(sd, 4)}\n"
                 self.tekst.append(a2)
                 vj = sd / mean  # współczynnik zmienności
-                a3 = f"Współczynnik zmienności Y wynosi {vj}\n"
+                a3 = f"Współczynnik zmienności Y wynosi {np.round(vj, 4)}\n"
                 self.tekst.append(a3)
                 self.tekst.append("\n")
             else:
-                a4 = f"Średnia zmiennej X{c-1} wynosi {mean}\n"
+                a4 = f"Średnia zmiennej X{c-1} wynosi {np.round(mean, 4)}\n"
                 self.tekst.append(a4)
                 sd = statistics.stdev(xi)  # odchylenie standardowe zmiennej
-                a5 = f"Odchylenie standardowe X{c-1} wynosi {sd}\n"
+                a5 = f"Odchylenie standardowe X{c-1} wynosi {np.round(sd, 4)}\n"
                 self.tekst.append(a5)
                 vj = sd / mean  # współczynnik zmienności
-                a6 = f"Współczynnik zmienności X{c-1} wynosi {vj}\n"
+                a6 = f"Współczynnik zmienności X{c-1} wynosi {np.round(vj, 4)}\n"
                 self.tekst.append(a6)
                 self.tekst.append("\n")
 
@@ -150,10 +159,7 @@ class Ui_MainWindow(object):
         self.label_2.setText(' '.join(self.tekst))
         self.update()
 
-        #print(f"zmienne nadające się mające tą zmienność +0.1 {variables}")
-        # print("dupa", "\n")
 
-        # ETAP 2 - macierz binarna reprezentująca możliwe kombinacje
         m = len(variables) - 1  # m jest liczbą zmiennych objaśniajacych, kolumny w macierzy binarnej
         S = 2 ** m - 1  # liczba kombinacji przepuszczonych zmiennych objaśniających, liczba wierszy macierzy binarnej
         binary_matrix = [i for i in product(range(2),
@@ -178,10 +184,17 @@ class Ui_MainWindow(object):
         corr_matrix = np.delete(corr_matrix, 0, axis=1)  # obliczanie sumy rij
 
         print(f"{corr_frame} \n")
-        korelacjaList = [corr_frame.columns.values.tolist()] + corr_frame.values.tolist()
+        corrList = corr_frame.values.tolist()
+        tyt = [corr_frame.columns.values.tolist()]
+        lis1 = np.round(corrList[0], 4)
+        lis2 = np.round(corrList[1], 4)
+        lis3 = np.round(corrList[2], 4)
+        lis4 = np.round(corrList[3], 4)
+        korelacjaList = f"{tyt}\n{lis1}\n{lis2}\n{lis3}\n{lis4}"
         #self.tableView.setModel(corr_frame)
-        a = '{:<6}|{:<13}'  # formatting
+        #a = '{:<6}|{:<13}'  # formatting
         print(f"{korelacjaList} \n")
+        self.tekst.append(f"{korelacjaList}\n")
         #for i in korelacjaList:
             #self.tekst.append(f"{korelacjaList[i]}\n")
             #print(f"{korelacjaList[i]} \n")

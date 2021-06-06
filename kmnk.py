@@ -30,5 +30,9 @@ def kmnk():
     b = a.transpose()
     print(b)
 
-a = 'derddddddddddddddddddrffffe'
-print((a[:8]))
+arr = [1.0, 0.9589718091458012, 0.4564404059700346, 0.7761545029051378, 0.6431411046881699]
+
+arr1 = np.round(arr, 4)
+
+
+print(arr1)
