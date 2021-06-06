@@ -29,4 +29,6 @@ def kmnk():
     print(a)
     b = a.transpose()
     print(b)
-kmnk()
+
+a = 'derddddddddddddddddddrffffe'
+print((a[:8]))

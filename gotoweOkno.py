@@ -9,11 +9,10 @@ from PyQt6.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFil
 from PyQt6.QtGui import QIcon
 import subprocess
 
-
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(728, 496)
+        MainWindow.resize(728, 700)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
@@ -26,7 +25,7 @@ class Ui_MainWindow(object):
         self.pushButton_2.setGeometry(QtCore.QRect(450, 30, 151, 41))
         self.pushButton_2.setObjectName("pushButton_2")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(380, 110, 301, 350))
+        self.label_2.setGeometry(QtCore.QRect(380, 110, 301, 450))
         self.label_2.setObjectName("label_2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -36,6 +35,7 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -121,23 +121,23 @@ class Ui_MainWindow(object):
             mean = statistics.mean(xi)  # średnia zmiennej
 
             if c == 1:
-                a1 = f"Srednia zmiennej Y wynosi {mean}\n"
+                a1 = f"Średnia zmiennej Y wynosi {mean}\n"
                 self.tekst.append(a1)
                 sd = statistics.stdev(xi)  # odchylenie standardowe zmiennej
                 a2 = f"Odchylenie standardowe Y wynosi {sd}\n"
                 self.tekst.append(a2)
                 vj = sd / mean  # współczynnik zmienności
-                a3 = f"współczynnik zmienności Y wynosi {vj}\n"
+                a3 = f"Współczynnik zmienności Y wynosi {vj}\n"
                 self.tekst.append(a3)
                 self.tekst.append("\n")
             else:
-                a4 = f"Srednia zmiennej X{c-1} wynosi {mean}\n"
+                a4 = f"Średnia zmiennej X{c-1} wynosi {mean}\n"
                 self.tekst.append(a4)
                 sd = statistics.stdev(xi)  # odchylenie standardowe zmiennej
                 a5 = f"Odchylenie standardowe X{c-1} wynosi {sd}\n"
                 self.tekst.append(a5)
                 vj = sd / mean  # współczynnik zmienności
-                a6 = f"współczynnik zmienności X{c-1} wynosi {vj}\n"
+                a6 = f"Współczynnik zmienności X{c-1} wynosi {vj}\n"
                 self.tekst.append(a6)
                 self.tekst.append("\n")
 
@@ -160,7 +160,7 @@ class Ui_MainWindow(object):
                                             repeat=m)]  # dwie linijki kodu generujące dowolną macierz z wszystkimi kombinacjami 0-1
         binary_matrix = np.array(binary_matrix)
         binary_matrix = np.delete(binary_matrix, 0, axis=0)  # usunięcie 1 wiersza z wygenerowanymi 0
-        print(f"{binary_matrix} \n")
+        # print(f"{binary_matrix} \n")
 
         dataSmall = data2.iloc[:, :-1]
 
@@ -176,9 +176,23 @@ class Ui_MainWindow(object):
         corr_matrix = np.delete(corr_matrix, 0,
                                 axis=0)  # usuniecie pierwszego wiersza i  kolumny z korelacją x i y, ponieważ potem jest
         corr_matrix = np.delete(corr_matrix, 0, axis=1)  # obliczanie sumy rij
+
         print(f"{corr_frame} \n")
+        korelacjaList = [corr_frame.columns.values.tolist()] + corr_frame.values.tolist()
+        #self.tableView.setModel(corr_frame)
+        a = '{:<6}|{:<13}'  # formatting
+        print(f"{korelacjaList} \n")
+        #for i in korelacjaList:
+            #self.tekst.append(f"{korelacjaList[i]}\n")
+            #print(f"{korelacjaList[i]} \n")
+
+
         print(f"{corr_matrix} \n")
         print("\n")
+        #self.tekst.append(corr_frame)
+
+
+
         #print(f"liczba S wynosi {S} liczba m wynosi {m}\n")
         # ETAP 4 - obliczanie indywidualnych wskaźników pojemności informacyjnej h
         final_matrix = binary_matrix
@@ -193,14 +207,14 @@ class Ui_MainWindow(object):
                     h = h.round(decimals=6, out=None)
                     final_matrix[i][j] = h
 
-        print(f"oblicznie małego h w tle\n")
+        #print(f"oblicznie małego h w tle\n")
 
         # ETAP 5 - obliczanie integralnych wskaźników pojemnosci informacyjnej
         for i in range(0, S):  # kolejne H są dodawane do listy, potem na podstawie pozycji znajdzie się index
             s = np.sum(final_matrix[i])  # najlepszej kombinacji zmiennych objaśniających
             s = round(s, 6)  # zaokrągla wartosc S do 6 liczb po przecinku
             H.append(s)
-            print(f"C{i} -- {sum(H)}")  # pusta lista WTF
+            # print(f"C{i} -- {sum(H)}")  # pusta lista WTF
 
         max_H = max(H)  # najwyzsze H
         idx = 0  # poszukiwany index
@@ -215,9 +229,13 @@ class Ui_MainWindow(object):
             if binary_matrix[idx][i] == 1:
                 var_win.append(variables[i])
 
-        print(f"\nOptymalnym zbiorem zmiennych objaśniających jest kombinacja C{idx}")
+        self.tekst.append(f"\nOptymalnym zbiorem zmiennych objaśniających\n jest kombinacja C{idx} czyli zmienne:")
         for i in range(len(var_win)):
-            print(var_win[i])
+            self.tekst.append(var_win[i])
+
+        self.label_2.setText(' '.join(self.tekst))
+        self.update()
+
 
 if __name__ == "__main__":
     import sys
