@@ -7,26 +7,30 @@ from itertools import product
 from pandas.core.arrays.sparse import dtype
 from PyQt6.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
 from PyQt6.QtGui import QIcon
+import subprocess
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
-
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(253, 323)
+        MainWindow.resize(728, 496)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(50, 40, 151, 41)) # zaladuj plik
+        self.pushButton.setGeometry(QtCore.QRect(110, 30, 151, 41))
         self.pushButton.setObjectName("pushButton")
-
-
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget) # podaj wynik
-        self.pushButton_2.setGeometry(QtCore.QRect(50, 110, 151, 41))
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        self.label.setGeometry(QtCore.QRect(40, 110, 301, 311))
+        self.label.setObjectName("label")
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(450, 30, 151, 41))
         self.pushButton_2.setObjectName("pushButton_2")
+        self.label_2 = QtWidgets.QLabel(self.centralwidget)
+        self.label_2.setGeometry(QtCore.QRect(380, 110, 301, 350))
+        self.label_2.setObjectName("label_2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 253, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 728, 22))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -36,16 +40,38 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Ekonometria"))
-        self.pushButton.setText(_translate("MainWindow", "Zaladuj plik"))
+        self.pushButton.setText(_translate("MainWindow", "Załaduj plik"))
+        self.label.setText(_translate("MainWindow", "Witaj w programie!\n"
+        "\n"
+        "1. Proszę przygotuj sobie plik exel o rozszerzeniu\n"
+        " .xlsx tak aby pierwszy wiersz miał tytuły Y, X1, X2,\n"
+        " X3 i X4. a poniżej w kolumnach były wartości. \n"
+        "\n"
+        "2. Przyciśnij przycisk \"Załaduj plik\" i wybierz plik\n"
+        " w którym są dane. \n"
+        "\n"
+        "3. Przyciśnij przycisk \"Podaj wyniki\" aby zobaczyć\n"
+        " przebieg i wyniki. \n"
+        "\n"
+        "\n"
+        "\n"
+        "\n"
+        "\n"
+        "\n"
+        " Autor programu: Paweł Sadkowski "))
+
+
         self.pushButton_2.setText(_translate("MainWindow", "Podaj wyniki"))
+        self.label_2.setText(_translate("MainWindow", "Wyniki obliczeń pojawią się po rozpoczęciu liczenia."))
         self.pushButton.clicked.connect(self.open_dialog_box)
         self.pushButton_2.clicked.connect(self.hellwig)
+
         #self.pushButton_2.clicked.connect(self.kmnk)
         self.file_name = ""
+        self.tekst = []
 
     def open_dialog_box(self):
         filename = QFileDialog.getOpenFileName()
@@ -53,26 +79,17 @@ class Ui_MainWindow(object):
         print(self.file_name)  # exel file path
 
     def start_count(self):
+        self.label_2.setText(self.file_name)
         print("start count")
+        print(self.file_name)
 
-    def kmnk(self):
-        file_name = self.file_name
-        sheet = 'date'  # nazwa arkusza z tabelą
-
-        data1 = pd.read_excel(file_name, sheet_name=sheet, header=None,
-                              engine='openpyxl')  # pobrane dane z arkusza przy czym 1 wiersz to nazwy,
-        # ponieważ z funkcją read_excel są trudne do pozyskania
-        data2 = pd.read_excel(file_name, sheet_name=sheet, engine='openpyxl')  # faktyczne dane
-
-        y = data1.iloc[0][0]  # nazwa zmiennej objasnianej jej pozycja w tabeli
-
-        var_number = len(data1.loc[0])  # liczba wszystkich zmiennych Y X1 X2 X3 X4
+    def update(self):
+        self.label.adjustSize()
 
     def hellwig(self):
 
         # Deklaracja używanych danych
-
-
+        self.tekst = []
         #self.file_name = 'D:/Workspace/Ekonometry/Ekonometry/dane.xlsx'  # nazwa dokumentu Excel o rozszerzeniu xslx
         print(self.file_name)
         file_name = self.file_name
@@ -86,31 +103,54 @@ class Ui_MainWindow(object):
         y = data1.iloc[0][0]  # nazwa zmiennej objasnianej jej pozycja w tabeli
 
         var_number = len(data1.loc[0])  # liczba wszystkich zmiennych Y X1 X2 X3 X4
-        print(f"Ilość zmiennych wraz z Y to {var_number - 1}\n")
+        #print(f"Ilość zmiennych wraz z Y to {var_number - 1}\n")
         variables = []  # wszystkie zmienne objasniajace spelnaijace Vj > 10%
         var_cor = []  # wszystkie współczynniki korelacji miedzy zmiennymi objaśniajacymi a objaśnianą
         H = []  # integralne wskaźniki integralności informacyjnej
-        var_win = []  # najlesze zmienne objaśniające
+        var_win = []  # najlepsze zmienne objaśniające
 
         # ETAP 1 - wspolczynnik zmiennosci Vj > 10%
         i = 0  # TU POWINNO BYC 0
+
+
         for c in range(1, var_number):  # dla każdej kolumny poza kolumną 1 ze zmienna objaśnianą
             xi = data1.loc[:, i]  # wszystkie wartosci liczbowe z kolumny
             xi = xi.loc[
                  1:,
                  ]  # nie branie pod uwagę 1 wiersza z wartościami nieliczbowymi (nazwy kolumn) nazwa kolumny liczbowej
             mean = statistics.mean(xi)  # średnia zmiennej
-            print(f"Srednia zmiennej X{c} wynosi {mean}")
-            sd = statistics.stdev(xi)  # odchylenie standardowe zmiennej
-            print(f"Odchylenie standardowe X{c} wynosi {sd}")
-            vj = sd / mean  # współczynnik zmienności
-            print(f"współczynnik zmienności X{c} wynosi {vj}")
+
+            if c == 1:
+                a1 = f"Srednia zmiennej Y wynosi {mean}\n"
+                self.tekst.append(a1)
+                sd = statistics.stdev(xi)  # odchylenie standardowe zmiennej
+                a2 = f"Odchylenie standardowe Y wynosi {sd}\n"
+                self.tekst.append(a2)
+                vj = sd / mean  # współczynnik zmienności
+                a3 = f"współczynnik zmienności Y wynosi {vj}\n"
+                self.tekst.append(a3)
+                self.tekst.append("\n")
+            else:
+                a4 = f"Srednia zmiennej X{c-1} wynosi {mean}\n"
+                self.tekst.append(a4)
+                sd = statistics.stdev(xi)  # odchylenie standardowe zmiennej
+                a5 = f"Odchylenie standardowe X{c-1} wynosi {sd}\n"
+                self.tekst.append(a5)
+                vj = sd / mean  # współczynnik zmienności
+                a6 = f"współczynnik zmienności X{c-1} wynosi {vj}\n"
+                self.tekst.append(a6)
+                self.tekst.append("\n")
+
             atr = data1.iloc[0][i]  # atrybut zmiennej, która spełnia warunek Vj > 10%
             if vj > 0.1:
                 variables.append(atr)  # dodawania atrybutów poprawnych zmiennych do listy
             i += 1
-            print("\n")
-        print(f"zmienne nadające się mające tą zmienność +0.1 {variables}")
+
+
+        self.label_2.setText(' '.join(self.tekst))
+        self.update()
+
+        #print(f"zmienne nadające się mające tą zmienność +0.1 {variables}")
         # print("dupa", "\n")
 
         # ETAP 2 - macierz binarna reprezentująca możliwe kombinacje
@@ -139,7 +179,7 @@ class Ui_MainWindow(object):
         print(f"{corr_frame} \n")
         print(f"{corr_matrix} \n")
         print("\n")
-        print(f"liczba S wynosi {S} liczba m wynosi {m}\n")
+        #print(f"liczba S wynosi {S} liczba m wynosi {m}\n")
         # ETAP 4 - obliczanie indywidualnych wskaźników pojemności informacyjnej h
         final_matrix = binary_matrix
 
@@ -178,9 +218,6 @@ class Ui_MainWindow(object):
         print(f"\nOptymalnym zbiorem zmiennych objaśniających jest kombinacja C{idx}")
         for i in range(len(var_win)):
             print(var_win[i])
-
-
-
 
 if __name__ == "__main__":
     import sys

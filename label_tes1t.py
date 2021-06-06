@@ -41,7 +41,9 @@ class Ui_MainWindow(object):
         self.pushButton.clicked.connect(self.click)
 
     def click(self):
-        self.label.setText("sd")
+
+        a = ["witam"]
+        self.label.setText(a)
         print("s")
 
 if __name__ == "__main__":
